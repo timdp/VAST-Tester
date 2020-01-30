@@ -75,7 +75,8 @@
   },
   "standard": {
     "globals": [
-      "Blob"
+      "Blob",
+      "DOMParser"
     ]
   },
   "husky": {

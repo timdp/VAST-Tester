@@ -1,4 +1,5 @@
 export * from './ad'
+export * from './ad-id'
 export * from './config'
 export * from './test'
 export * from './vast'

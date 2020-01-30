@@ -5,6 +5,7 @@ import vastEpic from './vast'
 import verificationEpic from './verification'
 import videoEpic from './video'
 import vpaidEpic from './vpaid'
+import adIdEpic from './ad-id'
 
 export default [
   configEpic,
@@ -13,5 +14,6 @@ export default [
   vastEpic,
   verificationEpic,
   videoEpic,
-  vpaidEpic
+  vpaidEpic,
+  adIdEpic
 ]

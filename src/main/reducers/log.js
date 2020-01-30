@@ -35,7 +35,10 @@ import {
   VPAID_HANDSHAKE_SUCCESSFUL,
   VPAID_LOAD_FAILED,
   VPAID_LOADED,
-  VPAID_WARNING
+  VPAID_WARNING,
+  ADID_VALIDATION_SUCCEEDED,
+  ADID_VALIDATION_FAILED,
+  ADID_VALIDATION_REQUEST_FAILED
 } from '../actions'
 import { PRELOAD_SIMULATION_TIME } from '../../common/settings'
 import msToString from '../../common/util/msToString'
@@ -254,6 +257,21 @@ const HANDLERS = {
     text: message,
     level: ERROR,
     metadata: cause == null ? null : { Cause: cause }
+  }),
+  [ADID_VALIDATION_SUCCEEDED]: ({ adId }) => ({
+    category: VAST,
+    text: `Ad-ID "${adId}" is valid`,
+    level: INFO
+  }),
+  [ADID_VALIDATION_FAILED]: ({ adId }) => ({
+    category: VAST,
+    text: `Ad-ID "${adId}" is invalid`,
+    level: WARN
+  }),
+  [ADID_VALIDATION_REQUEST_FAILED]: ({ adId, errorMessage }) => ({
+    category: VAST,
+    text: `Ad-ID validation request failed for ID "${adId}": ${errorMessage}`,
+    level: WARN
   })
 }
 

@@ -43,8 +43,12 @@ const getAdFromVast = (type, warn) => vast => {
   return ads[0]
 }
 
-const loadVastChain = (vastUrl, warn) =>
-  _from(new VASTLoader(vastUrl, { noSingleAdPods: true }).load()).pipe(
+const loadVastChain = (vastUrl, warn) => {
+  const vastLoader = new VASTLoader(vastUrl, { noSingleAdPods: true })
+  vastLoader.on('didParse', ({ vast, body }) => {
+    vast.xml = body
+  })
+  return _from(vastLoader.load()).pipe(
     map(chain => {
       const wrapperVasts = chain.slice(0, chain.length - 1)
       const wrappers = wrapperVasts.map(getAdFromVast('Wrapper', warn))
@@ -53,6 +57,7 @@ const loadVastChain = (vastUrl, warn) =>
       return { chain, wrappers, inLine }
     })
   )
+}
 
 const getLinearFromInLine = (inLine, warn) => {
   const linearCreatives = inLine.creatives
@@ -123,8 +128,12 @@ const loadAndAnalyzeVastChain = (url, warn) =>
     map(({ chain, wrappers, inLine }) => {
       const linear = getLinearFromInLine(inLine, warn)
       const verifications = selectVerifications([...wrappers, inLine])
+      const chainJson = toJSON(chain)
+      for (let i = 0; i < chain.length; ++i) {
+        chainJson[i].xml = chain[i].xml
+      }
       return {
-        chain: toJSON(chain),
+        chain: chainJson,
         inLine: toJSON(inLine),
         linear: toJSON(linear),
         verifications
